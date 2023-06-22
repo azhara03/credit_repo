@@ -11,7 +11,6 @@ public class currencyE {
     @Column
     private String currencyname;
 
-
     public currencyE() {
     }
     public currencyE(String currencyname) {

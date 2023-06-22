@@ -18,4 +18,9 @@ public class CreditTermServiceImpl implements CreditTermService {
     public List<CreditTerm1> findAll() {
         return creditTermRepository.findAll();
     }
+
+    @Override
+    public CreditTerm1 getById(Integer id) {
+        return creditTermRepository.findById(id).orElse(null);
+    }
 }

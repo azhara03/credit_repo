@@ -17,4 +17,9 @@ public class TypeOfCreditServiceImpl implements TypeOfCreditService {
     public List<TypeOfCredit> findAll() {
         return typeOfCreditRepository.findAll();
     }
+
+    @Override
+    public TypeOfCredit getById(Integer typeId) {
+        return typeOfCreditRepository.findById(typeId).orElse(null);
+    }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CreditTermService {
     List<CreditTerm1> findAll();
+
+    CreditTerm1 getById(Integer id);
 }

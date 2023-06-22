@@ -9,10 +9,10 @@ public class CreditTerm1 {
     @Id
     private int id;
     @Column
-    private String term;
+    private int term;
     public CreditTerm1() {
     }
-    public CreditTerm1(String term) {
+    public CreditTerm1(int term) {
         this.term = term;
     }
 
@@ -20,11 +20,11 @@ public class CreditTerm1 {
         return id;
     }
 
-    public String getTerm() {
+    public int getTerm() {
         return term;
     }
 
-    public void setTerm(String term) {
+    public void setTerm(int term) {
         this.term = term;
     }
 }

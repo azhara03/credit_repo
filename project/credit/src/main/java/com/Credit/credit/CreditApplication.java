@@ -9,3 +9,27 @@ public class CreditApplication {
 		SpringApplication.run(CreditApplication.class, args);
 	}
 }
+/*
+[
+    {
+        "id": 1,
+        "amount": 50000,
+        "typeid": 1,
+        "currencyid": 1,
+        "term": 2,
+        "creditTerm1": {
+            "id": 2,
+            "term": 12
+        },
+        "currencyE": {
+            "id": 1,
+            "currencyname": "KGS"
+        },
+        "type": {
+            "id": 1,
+            "creditname": "Потребительский",
+            "percent": 22
+        }
+    }
+]
+ */
