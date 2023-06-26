@@ -2,19 +2,18 @@ package com.Credit.credit.Controller;
 
 import com.Credit.credit.Entity.Credit;
 import com.Credit.credit.Model.CreditModel;
+import com.Credit.credit.Model.Platej;
 import com.Credit.credit.Service.CreditService;
 import com.Credit.credit.Service.CreditTermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/credits")
 public class CreditController {
     @Autowired
     private CreditService creditService;
@@ -23,9 +22,15 @@ public class CreditController {
         return creditService.findAll();
     }
     @GetMapping("/calculate")
-    public double Main(@RequestBody CreditModel model){
+    public Platej[] Main(@RequestBody CreditModel model){
         return creditService.calculate(model);
     }
+    @PostMapping("/add")
+    public CreditModel add(@RequestBody CreditModel model){
+        creditService.add(model);
+        return model;
+    }
+
 }
 /**
  {

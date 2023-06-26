@@ -1,8 +1,6 @@
 package com.Credit.credit.Service.Impl;
 
 import com.Credit.credit.Entity.TypeOfCredit;
-import com.Credit.credit.Entity.currencyE;
-import com.Credit.credit.Repository.CurrencyRepository;
 import com.Credit.credit.Repository.TypeOfCreditRepository;
 import com.Credit.credit.Service.TypeOfCreditService;
 import org.springframework.beans.factory.annotation.Autowired;
