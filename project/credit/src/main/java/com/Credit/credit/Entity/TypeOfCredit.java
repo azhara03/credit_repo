@@ -9,29 +9,23 @@ public class TypeOfCredit {
     @Id
     private int id;
     @Column
-    private String creditname;
-    @Column
-    private int percent;
-
-    public int getPercent() {
-        return percent;
-    }
+    private String credit_name;
 
     public TypeOfCredit() {
     }
     public TypeOfCredit(String typeName) {
-        this.creditname = typeName;
+        this.credit_name = typeName;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getCreditname() {
-        return creditname;
+    public String getCredit_name() {
+        return credit_name;
     }
 
-    public void setTypeName(String typeName) {
-        this.creditname = typeName;
+    public void setCredit_name(String credit_name) {
+        this.credit_name = credit_name;
     }
 }

@@ -1,6 +1,7 @@
 package com.Credit.credit.Service.Impl;
-/*
+
 import com.Credit.credit.Entity.currencyE;
+import com.Credit.credit.Repository.CurrencyRepository;
 import com.Credit.credit.Service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,4 @@ public class CurrencyServiceImpl implements CurrencyService {
         Optional<currencyE> opt=currencyRepository.findById(id);
         return opt.get();
     }
-}*/
+}

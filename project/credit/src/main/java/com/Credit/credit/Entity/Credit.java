@@ -1,11 +1,16 @@
 package com.Credit.credit.Entity;
 
+import com.Credit.credit.Service.InterestRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import de.jollyday.Holiday;
+import de.jollyday.HolidayCalendar;
+import de.jollyday.HolidayManager;
+
 
 @Entity
 @Table(name = "credit")
@@ -16,13 +21,13 @@ public class Credit {
     @Column
     private int amount;
     @Column
-    private int type_id;
+    private int term;
     @Column
-    private int term_id;
+    private int percent_id;
     @Column
     private LocalDate start_date;
     @Column
-    private Date end_date;
+    private LocalDate end_date;
     @Column
     private int client_id;
     @Column
@@ -32,29 +37,52 @@ public class Credit {
     //основ долг
     private double main_debt;
     @Column
-    private boolean credit_status;
+    private boolean repaid_status;
 
-    public Credit(int sum, TypeOfCredit typeId, CreditTerm1 creditTerm1) {
+    public Credit(int sum, InterestRate interestRate, int term) {
         this.amount = sum;
-        this.type_id = typeId.getId();
-        this.term_id= creditTerm1.getId();
+        this.percent_id = interestRate.getId();
+        this.term=term;
     }
 
     public Credit() {
-
     }
-    public Credit(int sum, TypeOfCredit type, CreditTerm1 creditTerm1, User user, Date endDate,
-                  int delayAmount, double mainDebt, boolean creditStatus) {
+    /*private static boolean isHoliday(LocalDate date, HolidayManager holidayManager) {
+        Holiday holiday = holidayManager.getHoliday(date);
+        return holiday != null;
+    }*/
+    private static boolean isWeekend(LocalDate date) {
+        // Проверка, является ли день недели субботой или воскресеньем
+        // Вернуть true, если день недели - выходной, иначе false
+        return date.getDayOfWeek().getValue() >= 6;
+    }
+    public Credit(int sum, int month, InterestRate interestRate, User user) {
         LocalDate now = LocalDate.now();
+        /*HolidayManager holidayManager = HolidayManager.getInstance(HolidayCalendar.RUSSIA); // Установка календаря праздников (Россия)
+        LocalDate paymentDate = getNextPaymentDate(currentDate, holidayManager);
+        currentDate = paymentDate.plusMonths(1);*/
+        if(isWeekend(now))
+        {
+            now=now.plusDays(1);
+            if(isWeekend(now))
+                now=now.plusDays(1);
+        }
         this.amount = sum;
-        this.type_id = type.getId();
-        this.term_id= creditTerm1.getId();
+        this.term=month;
+        LocalDate d=LocalDate.now();
+        d=d.plusMonths(month);
+        this.percent_id = interestRate.getId();
         this.client_id=user.getId();
         this.start_date=now;
-        this.end_date=endDate;
-        this.delay_amount=delayAmount;
-        this.main_debt=mainDebt;
-        this.credit_status=creditStatus;
+        if(isWeekend(d)) {
+            d=d.plusDays(1);
+            if(isWeekend(d))
+                d=d.plusDays(1);
+        }
+        this.end_date=d;
+        this.delay_amount=0;
+        this.main_debt=sum;
+        this.repaid_status=false;
     }
 
     public int getId() {
@@ -73,35 +101,23 @@ public class Credit {
         this.amount = amount;
     }
 
-    public int getType_id() {
-        return type_id;
-    }
-
-    public void setType_id(int type_id) {
-        this.type_id = type_id;
-    }
-
-    public int getTerm_id() {
-        return term_id;
-    }
-
-    public void setTerm_id(int term_id) {
-        this.term_id = term_id;
-    }
 
     public LocalDate getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(LocalDate start_date) {
-        this.start_date = start_date;
+    public void setStart_date(LocalDate date) {
+        //LocalDate now = LocalDate.now();
+        this.start_date = date;
     }
 
-    public Date getEnd_date() {
+
+
+    public LocalDate getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(Date end_date) {
+    public void setEnd_date(LocalDate end_date) {
         this.end_date = end_date;
     }
 
@@ -129,29 +145,13 @@ public class Credit {
         this.main_debt = main_debt;
     }
 
-    public boolean isCredit_status() {
-        return credit_status;
+
+    public InterestRate getInterestRate() {
+        return interestRate;
     }
 
-    public void setCredit_status(boolean credit_status) {
-        this.credit_status = credit_status;
-    }
-
-    public CreditTerm1 getCreditTerm1() {
-        return creditTerm1;
-    }
-
-    public void setCreditTerm1(CreditTerm1 creditTerm1) {
-        this.creditTerm1 = creditTerm1;
-    }
-
-
-    public TypeOfCredit getType() {
-        return type;
-    }
-
-    public void setType(TypeOfCredit type) {
-        this.type = type;
+    public void setInterestRate(InterestRate interestRate) {
+        this.interestRate = interestRate;
     }
 
     public User getUser() {
@@ -162,7 +162,30 @@ public class Credit {
         this.user = user;
     }
 
-    /*public Credit(int amount, int typeid, int currencyid, int term) {
+    public int getTerm() {
+        return term;
+    }
+
+    public void setTerm(int term) {
+        this.term = term;
+    }
+
+    public int getPercent_id() {
+        return percent_id;
+    }
+
+    public void setPercent_id(int percent_id) {
+        this.percent_id = percent_id;
+    }
+
+    public boolean isRepaid_status() {
+        return repaid_status;
+    }
+
+    public void setRepaid_status(boolean repaid_status) {
+        this.repaid_status = repaid_status;
+    }
+/*public Credit(int amount, int typeid, int currencyid, int term) {
         this.amount = amount;
         this.typeid = typeid;
         this.currencyid = currencyid;
@@ -174,13 +197,12 @@ public class Credit {
 
 
     @ManyToOne(optional=false)
-    @JoinColumn(name="term_id", insertable = false, updatable = false)
-    private CreditTerm1 creditTerm1;
+    @JoinColumn(name="percent_id", insertable = false, updatable = false)
+    private InterestRate interestRate;
 
-
-    @ManyToOne(optional=false)
+    /*@ManyToOne(optional=false)
     @JoinColumn(name="type_id", insertable = false, updatable = false)
-    private TypeOfCredit type;
+    private TypeOfCredit type;*/
 
     @ManyToOne(optional=false)
     @JoinColumn(name="client_id", insertable = false, updatable = false)
