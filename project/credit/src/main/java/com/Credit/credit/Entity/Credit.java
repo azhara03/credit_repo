@@ -72,7 +72,7 @@ public class Credit {
         this.amount = sum;
         this.term=month;
         LocalDate d=LocalDate.now();
-        d=d.plusMonths(month);
+        d=d.plusMonths(month-1);
 
         this.percent_id = interestRate.getId();
         //InterestRate r=new InterestRate(interestRate.getId());

@@ -61,17 +61,21 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (model.getTotal_amount() >= credit.getMonth_pay() && model.getTotal_amount() <= summa_dolga) {
                 double peni = 0;
-                if (a == 0) {
+                if (a == 0 || a<0) {
                     //если клиент весь долг заплатил
                     if(model.getTotal_amount()==credit.getTotal_debt()){
                         credit.setTotal_debt(0);
                         credit.setRepaid_status(true);
                     }
+
                     else {
                         credit.setTotal_debt(credit.getTotal_debt() - model.getTotal_amount());
                     }
                     ///schedule.setPayment(model.getTotal_amount());
                 }
+                /*else if(a<0){
+
+                }*/
                 else {
                     double percent = schedule.getCredit().getInterestRate().getDelay_percent();
                     peni = schedule.getMonth_pay() * (percent / 100) * a;

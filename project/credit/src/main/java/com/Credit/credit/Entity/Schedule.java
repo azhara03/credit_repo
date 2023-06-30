@@ -16,12 +16,12 @@ public class Schedule {
     private int credit_id;
     @Column
     private boolean payment_status ;
-    /*@Column
+    @Column
     private double main_debt;
     @Column
     private double monthly_percent;
     @Column
-    private double payment;*/
+    private double total_debt;
 
     public int getId() {
         return id;
@@ -63,7 +63,7 @@ public class Schedule {
         this.payment_status = payment_status;
     }
 
-    /*public double getMain_debt() {
+    public double getMain_debt() {
         return main_debt;
     }
 
@@ -77,7 +77,7 @@ public class Schedule {
 
     public void setMonthly_percent(double monthly_percent) {
         this.monthly_percent = monthly_percent;
-    }*/
+    }
 
     public Credit getCredit() {
         return credit;
@@ -87,6 +87,13 @@ public class Schedule {
         this.credit = credit;
     }
 
+    public double getTotal_debt() {
+        return total_debt;
+    }
+
+    public void setTotal_debt(double total_debt) {
+        this.total_debt = total_debt;
+    }
 
     @ManyToOne(optional=false)
     @JoinColumn(name="credit_id", insertable = false, updatable = false)
