@@ -30,6 +30,11 @@ public class CreditServiceImpl implements CreditService {
         return (List<Credit>) creditRepository.findAll();
     }
 
+    @Override
+    public Credit getById(Integer creditId) {
+        return creditRepository.findById(creditId).orElse(null);
+    }
+
     /*public double calculate(CreditModel model) {
         Credit credit = new Credit(model.getSum(), model.getType(), model.getCurrencyE(), model.getCreditTerm1());
         TypeOfCredit type = typeOfCreditService.getById(model.getType().getId());
@@ -47,6 +52,14 @@ public class CreditServiceImpl implements CreditService {
                 model.getEnd_date());*/
         try {
             Credit credit = new Credit(model.getSum(), model.getMonth(), model.getInterestRate(), model.getUser());
+            InterestRate interestRate = interestRateService.getById(model.getInterestRate().getId());
+            double yearPercent = interestRate.getPercent();
+            double percentOneMonth = yearPercent / 12 / 100;
+            int sumCredit = credit.getAmount();
+            double k = (percentOneMonth * (Math.pow((1 + percentOneMonth), model.getMonth()))) / (Math.pow((1 + percentOneMonth), model.getMonth()) - 1);
+            double total=k*sumCredit*model.getMonth();
+            credit.setMonth_pay(k*sumCredit);
+            credit.setTotal_debt(total);
             //Date date = new Date();
             creditRepository.save(credit);
             return credit;
@@ -54,7 +67,6 @@ public class CreditServiceImpl implements CreditService {
         catch (Exception ex){
             return null;
         }
-
     }
     public Platej[] calculate(CreditModel model) {
         Credit credit = new Credit(model.getSum(), model.getInterestRate(), model.getMonth());

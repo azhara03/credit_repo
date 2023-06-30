@@ -27,6 +27,7 @@ public class CreditController {
     }
     @PostMapping("/add")
     public CreditModel add(@RequestBody CreditModel model){
+
         creditService.add(model);
         return model;
     }

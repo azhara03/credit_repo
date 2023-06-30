@@ -11,7 +11,6 @@ import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
 
-
 @Entity
 @Table(name = "credit")
 public class Credit {
@@ -35,9 +34,11 @@ public class Credit {
     private int delay_amount;
     @Column
     //основ долг
-    private double main_debt;
+    private double total_debt;
     @Column
     private boolean repaid_status;
+    @Column
+    private double monthpay;
 
     public Credit(int sum, InterestRate interestRate, int term) {
         this.amount = sum;
@@ -67,11 +68,14 @@ public class Credit {
             if(isWeekend(now))
                 now=now.plusDays(1);
         }
+
         this.amount = sum;
         this.term=month;
         LocalDate d=LocalDate.now();
         d=d.plusMonths(month);
+
         this.percent_id = interestRate.getId();
+        //InterestRate r=new InterestRate(interestRate.getId());
         this.client_id=user.getId();
         this.start_date=now;
         if(isWeekend(d)) {
@@ -81,7 +85,8 @@ public class Credit {
         }
         this.end_date=d;
         this.delay_amount=0;
-        this.main_debt=sum;
+
+        //this.total_debt=;
         this.repaid_status=false;
     }
 
@@ -92,7 +97,6 @@ public class Credit {
     public void setId(int id) {
         this.id = id;
     }
-
     public int getAmount() {
         return amount;
     }
@@ -100,7 +104,6 @@ public class Credit {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-
 
     public LocalDate getStart_date() {
         return start_date;
@@ -110,8 +113,6 @@ public class Credit {
         //LocalDate now = LocalDate.now();
         this.start_date = date;
     }
-
-
 
     public LocalDate getEnd_date() {
         return end_date;
@@ -137,12 +138,12 @@ public class Credit {
         this.delay_amount = delay_amount;
     }
 
-    public double getMain_debt() {
-        return main_debt;
+    public double getTotal_debt() {
+        return total_debt;
     }
 
-    public void setMain_debt(double main_debt) {
-        this.main_debt = main_debt;
+    public void setTotal_debt(double main_debt) {
+        this.total_debt = main_debt;
     }
 
 
@@ -185,34 +186,21 @@ public class Credit {
     public void setRepaid_status(boolean repaid_status) {
         this.repaid_status = repaid_status;
     }
-/*public Credit(int amount, int typeid, int currencyid, int term) {
-        this.amount = amount;
-        this.typeid = typeid;
-        this.currencyid = currencyid;
-        this.term = term;
-        /*this.creditTerm1 = creditTerm1;
-        this.currencyE = currencyE;*/
-        //this.type = type;
-    //}
 
+    public double getMonth_pay() {
+        return monthpay;
+    }
+
+    public void setMonth_pay(double month_pay) {
+        this.monthpay = month_pay;
+    }
 
     @ManyToOne(optional=false)
     @JoinColumn(name="percent_id", insertable = false, updatable = false)
     private InterestRate interestRate;
 
-    /*@ManyToOne(optional=false)
-    @JoinColumn(name="type_id", insertable = false, updatable = false)
-    private TypeOfCredit type;*/
-
     @ManyToOne(optional=false)
     @JoinColumn(name="client_id", insertable = false, updatable = false)
     private User user;
-
-    /*@ManyToOne(optional=false)
-    @JoinColumn(name="schedule_id", insertable = false, updatable = false)
-    private User user;*/
-
-
-
 
 }

@@ -9,13 +9,31 @@ public class User {
     @Id
     private int id;
     @Column
-    private String fio;
+    private String first_name;
+    @Column
+    private String last_name;
+    @Column
+    private String middle_name;
+    @Column
+    private int perconal_code;
 
     public int getId() {
         return id;
     }
 
-    public String getFio() {
-        return fio;
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public String getMiddle_name() {
+        return middle_name;
+    }
+
+    public int getPerconal_code() {
+        return perconal_code;
     }
 }

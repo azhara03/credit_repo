@@ -36,4 +36,11 @@ public class InterestRate {
     public int getPercent() {
         return percent;
     }
+
+    @ManyToOne(optional=false)
+    @JoinColumn(name="type_id", insertable = false, updatable = false)
+    private TypeOfCredit typeOfCredit;
+    @ManyToOne(optional=false)
+    @JoinColumn(name="currency_id", insertable = false, updatable = false)
+    private currencyE currencyE;
 }

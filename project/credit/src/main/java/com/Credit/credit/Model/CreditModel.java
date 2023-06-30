@@ -23,13 +23,14 @@ public class CreditModel {
     //896
     private double main_debt;
     private boolean repaid_status;
+    private double month_pay;
     public CreditModel(int sum, InterestRate interestRate, int term) {
         this.sum = sum;
         this.interestRate = interestRate;
         this.month=term;
     }
 
-    public CreditModel(int sum, InterestRate interestRate, User user, Date start_date, Date end_date, int delay_amount, double main_debt, boolean credit_status) {
+    public CreditModel(int sum, InterestRate interestRate, User user, Date start_date, Date end_date, int delay_amount, double main_debt, boolean credit_status, double month_pay) {
         this.sum = sum;
         this.interestRate = interestRate;
         //this.creditTerm1 = creditTerm1;
@@ -39,5 +40,6 @@ public class CreditModel {
         this.delay_amount = delay_amount;
         this.main_debt = main_debt;
         this.repaid_status = credit_status;
+        this.month_pay=month_pay;
     }
 }
