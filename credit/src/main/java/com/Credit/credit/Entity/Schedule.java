@@ -18,10 +18,10 @@ public class Schedule {
     private int credit_id;
     @Column
     private boolean payment_status ;
-    @Column
-    private double main_debt;
-    @Column
-    private double monthly_percent;
+   // @Column
+    //private double main_debt;
+   // @Column
+ //   private double monthly_percent;
 
     public Schedule() {
 
@@ -34,8 +34,8 @@ public class Schedule {
         this.month_pay=month_pay;
         this.credit_id=credit_id;
         this.payment_status=payment_status;
-        this.main_debt=main_debt;
-        this.monthly_percent=monthly_percent;
+     //   this.main_debt=main_debt;
+       // this.monthly_percent=monthly_percent;
     }
 
         public int getId () {
@@ -82,7 +82,7 @@ public class Schedule {
         public void setPayment_status ( boolean payment_status){
             this.payment_status = payment_status;
         }
-        public double getMain_debt () {
+      /*  public double getMain_debt () {
             return main_debt;
         }
         public void setMain_debt ( double main_debt){
@@ -93,7 +93,7 @@ public class Schedule {
         }
         public void setMonthly_percent ( double monthly_percent){
             this.monthly_percent = monthly_percent;
-        }
+        }*/
 
 
         //для форейн кей

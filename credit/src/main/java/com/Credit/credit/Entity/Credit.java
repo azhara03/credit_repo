@@ -30,6 +30,24 @@ public class Credit {
     private double total_debt;
     @Column
     private boolean repaid_status;
+    @Column
+    private double monthpay;
+
+    public void setTotal_debt(double total_debt) {
+        this.total_debt = total_debt;
+    }
+
+    public void setMonthpay(double monthpay) {
+        this.monthpay = monthpay;
+    }
+
+    public double getTotal_debt() {
+        return total_debt;
+    }
+
+    public double getMonthpay() {
+        return monthpay;
+    }
 
     public Credit(int sum, InterestRate interestRate, int term) {
         this.amount = sum;

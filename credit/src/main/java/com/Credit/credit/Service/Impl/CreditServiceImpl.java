@@ -4,6 +4,7 @@ import com.Credit.credit.Model.CreditModel;
 import com.Credit.credit.Model.Platej;
 import com.Credit.credit.Repository.CreditRepository;
 import com.Credit.credit.Repository.ScheduleRepository;
+import com.Credit.credit.Repository.UserRepository;
 import com.Credit.credit.Service.CreditService;
 import com.Credit.credit.Service.CreditTermService;
 import com.Credit.credit.Service.InterestRateService;
@@ -24,6 +25,7 @@ import java.util.List;
 public class CreditServiceImpl implements CreditService {
     CreditRepository creditRepository;
     ScheduleRepository scheduleRepository;
+    UserRepository userRepository;
     TypeOfCreditService typeOfCreditService;
     CreditTermService creditTermService;
     InterestRateService interestRateService;
@@ -50,7 +52,10 @@ public class CreditServiceImpl implements CreditService {
     }*/
     public Credit add(CreditModel model) {
         try {
+             String code = LocalDate.now().toString().replace("-", "") + model.getUser().getId();
             Credit credit = new Credit(model.getSum(), model.getMonth(), model.getInterestRate(), model.getUser());
+         // credit.getUser().setPerconal_code(code);
+
             InterestRate interestRate = interestRateService.getById(model.getInterestRate().getId());
             double yearPercent = interestRate.getPercent();
             double percentOneMonth = yearPercent / 12 / 100;
@@ -58,9 +63,9 @@ public class CreditServiceImpl implements CreditService {
             double k = (percentOneMonth * (Math.pow((1 + percentOneMonth), model.getMonth()))) / (Math.pow((1 + percentOneMonth), model.getMonth()) - 1);
             double total=k*sumCredit*model.getMonth();
             credit.setMain_debt(total);
-            //Date date = new Date();
+            //credit.setMonthpay();
             creditRepository.save(credit);
-            LocalDate date = model.getStart_date();
+            LocalDate date = credit.getStart_date();
             Platej[] platejs = calculate(model);
             for (Platej platej : platejs) {
                 Schedule schedule = new Schedule();
@@ -70,13 +75,24 @@ public class CreditServiceImpl implements CreditService {
                         date = date.plusDays(1);
                 }
                 schedule.setPayment_date(date);
-
                 schedule.setMonth_pay(platej.getPayForMonth());
-
                 schedule.setCredit_id(credit.getId());
                 scheduleRepository.save(schedule);
-                date.plusMonths(1);
+                date=date.plusMonths(1);
             }
+            User user = model.getUser();
+            user.setPerconal_code(code);
+            if (user.getFirst_name() == null) {
+                // Если first_name равно null, сохраняем имеющееся значение из базы данных
+                User existingUser = userRepository.findById(user.getId()).orElse(null);
+                if (existingUser != null) {
+                    user.setFirst_name(existingUser.getFirst_name());
+                }
+            }
+
+            //чтобы сохранить только personal_code используем saveAndflush
+            userRepository.saveAndFlush(user);
+
             return credit;
         }
         catch (Exception ex){
