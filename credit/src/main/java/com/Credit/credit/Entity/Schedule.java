@@ -18,13 +18,40 @@ public class Schedule {
     private int credit_id;
     @Column
     private boolean payment_status ;
-   // @Column
-    //private double main_debt;
-   // @Column
- //   private double monthly_percent;
+    @Column
+    private double main_debt;
+   @Column
+    private double monthly_percent;
+
+    public double getMain_debt() {
+        return main_debt;
+    }
+
+    public double getMonthly_percent() {
+        return monthly_percent;
+    }
+
+    public double getTotal_debt() {
+        return total_debt;
+    }
+
+    @Column
+   private double total_debt;
 
     public Schedule() {
 
+    }
+
+    public void setMain_debt(double main_debt) {
+        this.main_debt = main_debt;
+    }
+
+    public void setMonthly_percent(double monthly_percent) {
+        this.monthly_percent = monthly_percent;
+    }
+
+    public void setTotal_debt(double total_debt) {
+        this.total_debt = total_debt;
     }
 
     //конструктор

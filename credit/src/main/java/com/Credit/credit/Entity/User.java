@@ -9,6 +9,19 @@ public class User {
     @Id
     private int id;
 
+    @Column
+    private String first_name;
+    @Column
+    private String last_name ;
+
+    @Column
+    private String middle_name;
+
+    @Column
+    private String perconal_code;
+    public int getId() {
+        return id;
+    }
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
@@ -41,19 +54,6 @@ public class User {
         return perconal_code;
     }
 
-    @Column
-    private String first_name;
-    @Column
-    private String last_name ;
-
-    @Column
-    private String middle_name;
-
-    @Column
-    private String perconal_code;
-    public int getId() {
-        return id;
-    }
 
 
 }
