@@ -1,8 +1,5 @@
 package com.Credit.credit.Entity;
 
-import com.Credit.credit.Model.CreditTotal;
-import com.Credit.credit.Model.PaymentTotal;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 

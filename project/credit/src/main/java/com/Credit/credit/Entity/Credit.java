@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@SqlResultSetMapping(
+/*@SqlResultSetMapping(
         name="getCred", classes = {
                 @ConstructorResult(targetClass = CreditTotal.class, columns = {
                         @ColumnResult(name="month"),
@@ -19,7 +19,7 @@ import java.time.LocalDate;
         parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "start_d", type = LocalDate.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "end_d", type = LocalDate.class)}
-)
+)*/
 @Table(name = "credit")
 public class Credit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

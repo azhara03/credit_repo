@@ -6,6 +6,4 @@ public class CreditTotal {
     String month;
     int count;
     BigInteger sum;
-
-
 }
