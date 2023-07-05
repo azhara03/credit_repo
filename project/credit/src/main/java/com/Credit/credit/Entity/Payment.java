@@ -1,9 +1,36 @@
 package com.Credit.credit.Entity;
 
+import com.Credit.credit.Model.CreditTotal;
+import com.Credit.credit.Model.PaymentTotal;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+/*@SqlResultSetMapping(
+        name="getPay", classes = {
+        @ConstructorResult(targetClass = PaymentTotal.class, columns = {
+                @ColumnResult(name="total_debt"),
+                @ColumnResult(name="total_sum")
+        }),
+}
+)
+@NamedStoredProcedureQuery(
+        name = "getPayments",
+        procedureName = "Payment.fnc_payment_report", resultSetMappings = {"getPay"},
+        parameters = {
+                @StoredProcedureParameter(
+                        mode=ParameterMode.IN,
+                        name="start_d",
+                        type = LocalDate.class
+                ),
+                @StoredProcedureParameter(
+                        mode=ParameterMode.IN,
+                        name="end_d",
+                        type = LocalDate.class
+                )
+        }
+)*/
 @Table(name = "payments")
 public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

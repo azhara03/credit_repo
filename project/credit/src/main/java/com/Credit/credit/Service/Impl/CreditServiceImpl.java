@@ -1,9 +1,11 @@
 package com.Credit.credit.Service.Impl;
 import com.Credit.credit.Entity.*;
 import com.Credit.credit.Model.CreditModel;
+import com.Credit.credit.Model.CreditTotal;
 import com.Credit.credit.Model.Platej;
 import com.Credit.credit.Repository.CreditRepository;
 import com.Credit.credit.Repository.ScheduleRepository;
+import com.Credit.credit.Repository.UserRepository;
 import com.Credit.credit.Service.CreditService;
 import com.Credit.credit.Service.CreditTermService;
 import com.Credit.credit.Service.InterestRateService;
@@ -13,13 +15,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class CreditServiceImpl implements CreditService {
+    UserRepository userRepository;
     CreditRepository creditRepository;
     ScheduleRepository scheduleRepository;
     TypeOfCreditService typeOfCreditService;
@@ -33,7 +40,26 @@ public class CreditServiceImpl implements CreditService {
     public Credit getById(Integer creditId) {
         return creditRepository.findById(creditId).orElse(null);
     }
-
+    @PersistenceContext
+    private EntityManager em;
+    @Override
+    public Map<String, ?> getCredit(LocalDate d1, LocalDate d2){
+        //StoredProcedureQuery query = em.createNamedStoredProcedureQuery("getAllSchedules");
+        //query.registerStoredProcedureParameter("id_cr", Integer.class, ParameterMode.IN);
+        /*query.setParameter("start_d", d1);
+        query.setParameter("end_d", d2);
+        query.execute();
+        return query.getResultList();*/
+        return creditRepository.getCreditInfo(d1, d2);
+    }
+    @Override
+    public List getLoan(LocalDate d1, LocalDate d2){
+        return creditRepository.getLoan(d1, d2);
+    }
+    @Override
+    public List getLoanByDay(LocalDate d1, LocalDate d2){
+        return creditRepository.getLoanByDay(d1, d2);
+    }
     private static boolean isWeekend(LocalDate date) {
         // Проверка, является ли день недели субботой или воскресеньем
         // Вернуть true, если день недели - выходной, иначе false
@@ -41,6 +67,7 @@ public class CreditServiceImpl implements CreditService {
     }
     public Credit add(CreditModel model) {
         try {
+            String code = LocalDate.now().toString().replace("-", "") + model.getUser().getId();;
             Credit credit = new Credit(model.getSum(), model.getMonth(), model.getInterestRate(), model.getUser());
             InterestRate interestRate = interestRateService.getById(model.getInterestRate().getId());
             double yearPercent = interestRate.getPercent();
@@ -52,33 +79,26 @@ public class CreditServiceImpl implements CreditService {
             credit.setTotal_debt(total);
             //Date date = new Date();
             creditRepository.save(credit);
-            LocalDate date = credit.getStart_date();
+            LocalDate date = credit.getStart_date().plusMonths(1);
+            LocalDate startDate=date;
+            if (isWeekend(date)) {
+                date = date.plusDays(1);
+                if (isWeekend(date))
+                    date = date.plusDays(1);
             LocalDate dateOfPAy=date;
+
             Platej[] platejs = calculate(model);
 
             for (Platej platej : platejs) {
                 Schedule schedule = new Schedule();
 
-                if(platej.getMonth()==1)
-                    dateOfPAy=date;
-                else if(platej.getMonth()==1){
+                if (platej.getMonth() == 1)
+                    dateOfPAy = date;
+                /*else if(platej.getMonth()==1){
                     dateOfPAy = date.plusMonths(1);
-                    /*if (isWeekend(dateOfPAy)) {
-                        dateOfPAy = dateOfPAy.plusDays(1);
-                        if (isWeekend(date))
-                            dateOfPAy = dateOfPAy.plusDays(1);
-                    }
-                    schedule.setPayment_date(dateOfPAy);*/
-                }
+                }*/
                 else {
-                    dateOfPAy = credit.getStart_date().plusMonths(platej.getMonth() - 1);
-                    /*if (isWeekend(dateOfPAy)) {
-                        dateOfPAy = dateOfPAy.plusDays(1);
-                        if (isWeekend(date))
-                            dateOfPAy = dateOfPAy.plusDays(1);
-                    }
-                    schedule.setPayment_date(dateOfPAy);*/
-                    //schedule.setPayment_date(credit.getStart_date().plusMonths(platej.getMonth() - 1));
+                    dateOfPAy = startDate.plusMonths(platej.getMonth() - 1);
                 }
                 if (isWeekend(dateOfPAy)) {
                     dateOfPAy = dateOfPAy.plusDays(1);
@@ -92,14 +112,14 @@ public class CreditServiceImpl implements CreditService {
                 schedule.setTotal_debt(platej.getOstatokOtPogasheniya());
                 schedule.setCredit_id(credit.getId());
                 scheduleRepository.save(schedule);
-                //date=schedule.getPayment_date();
-                /*if (isWeekend(date)) {
-                    date = date.plusDays(1);
-                    if (isWeekend(date))
-                        date = date.plusDays(1);
-                }*/
             }
-
+            }
+            User user = model.getUser();user.setPerconal_code(code);
+            if (user.getFirst_name() == null) {    // Если first_name равно null, сохраняем имеющееся значение из базы данных
+                User existingUser = userRepository.findById(user.getId()).orElse(null);    if (existingUser != null) {
+                    user.setFirst_name(existingUser.getFirst_name());    }
+            }
+//чтобы сохранить только personal_code используем saveAndflushuserRepository.saveAndFlush(user);
             return credit;
         }
         catch (Exception ex){

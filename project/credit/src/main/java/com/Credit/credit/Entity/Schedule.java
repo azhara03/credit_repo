@@ -4,9 +4,25 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+/*@NamedStoredProcedureQuery (name = "getAllSchedules",
+        procedureName = "sp_schedule",
+        resultClasses = Schedule.class)*/
+/*@NamedStoredProcedureQuery(
+        name = "getAllSchedules",
+        procedureName = "sp_schedules7",
+        resultClasses = { Schedule.class },
+        parameters = {
+                @StoredProcedureParameter(
+                        mode=ParameterMode.IN,
+                        name="id_cr",
+                        type = Integer.class
+                )
+        }
+)*/
 @Table(name="schedules")
 public class Schedule {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private int id;
     @Column
     private LocalDate payment_date;
@@ -22,6 +38,7 @@ public class Schedule {
     private double monthly_percent;
     @Column
     private double total_debt;
+
 
     public int getId() {
         return id;

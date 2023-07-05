@@ -4,9 +4,13 @@ import com.Credit.credit.Entity.Credit;
 import com.Credit.credit.Entity.CreditTerm1;
 import com.Credit.credit.Entity.TypeOfCredit;
 import com.Credit.credit.Model.CreditModel;
+import com.Credit.credit.Model.CreditTotal;
 import com.Credit.credit.Model.Platej;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public interface CreditService {
     //double calculate(CreditModel model);
@@ -14,4 +18,8 @@ public interface CreditService {
     List<Credit> findAll();
     Credit add(CreditModel model);
     Credit getById(Integer creditId);
+    Map<String, ?> getCredit(LocalDate d1, LocalDate d2);
+    List getLoan(LocalDate d1, LocalDate d2);
+    List getLoanByDay(LocalDate d1, LocalDate d2);
+
 }

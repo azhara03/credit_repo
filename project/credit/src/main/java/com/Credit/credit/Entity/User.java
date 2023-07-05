@@ -15,7 +15,7 @@ public class User {
     @Column
     private String middle_name;
     @Column
-    private int perconal_code;
+    private String perconal_code;
 
     public int getId() {
         return id;
@@ -33,7 +33,15 @@ public class User {
         return middle_name;
     }
 
-    public int getPerconal_code() {
+    public String getPerconal_code() {
         return perconal_code;
+    }
+
+    public void setPerconal_code(String perconal_code) {
+        this.perconal_code = perconal_code;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 }

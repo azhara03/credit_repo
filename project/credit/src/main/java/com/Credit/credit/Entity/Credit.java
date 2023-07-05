@@ -1,17 +1,25 @@
 package com.Credit.credit.Entity;
 
-import com.Credit.credit.Service.InterestRateService;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.Credit.credit.Model.CreditTotal;
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import de.jollyday.Holiday;
-import de.jollyday.HolidayCalendar;
-import de.jollyday.HolidayManager;
 
 @Entity
+@SqlResultSetMapping(
+        name="getCred", classes = {
+                @ConstructorResult(targetClass = CreditTotal.class, columns = {
+                        @ColumnResult(name="month"),
+                        @ColumnResult(name="count"),
+                        @ColumnResult(name="sum")
+                }),
+}
+)
+@NamedStoredProcedureQuery(name = "Credit.getCredits",
+        procedureName = "fnc_schedule_report", resultSetMappings = {"getCred"},
+        parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "start_d", type = LocalDate.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "end_d", type = LocalDate.class)}
+)
 @Table(name = "credit")
 public class Credit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +80,7 @@ public class Credit {
         this.amount = sum;
         this.term=month;
         LocalDate d=LocalDate.now();
-        d=d.plusMonths(month-1);
+        d=d.plusMonths(month);
 
         this.percent_id = interestRate.getId();
         //InterestRate r=new InterestRate(interestRate.getId());

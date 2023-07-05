@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -73,9 +75,6 @@ public class PaymentServiceImpl implements PaymentService {
                     }
                     ///schedule.setPayment(model.getTotal_amount());
                 }
-                /*else if(a<0){
-
-                }*/
                 else {
                     double percent = schedule.getCredit().getInterestRate().getDelay_percent();
                     peni = schedule.getMonth_pay() * (percent / 100) * a;
@@ -102,8 +101,14 @@ public class PaymentServiceImpl implements PaymentService {
                 creditRepository.save(credit);
                 paymentRepository.save(payment);
             }
-
         }
         return payment;
+    }
+
+    public Map<String, ?> getPayment(LocalDate d1, LocalDate d2){
+        return  paymentRepository.getPaymentInfo(d1, d2);
+    }
+    public Double summ (LocalDate d1, LocalDate d2){
+        return  paymentRepository.sum(d1, d2);
     }
 }
