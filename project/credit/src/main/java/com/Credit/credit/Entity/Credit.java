@@ -1,6 +1,7 @@
 package com.Credit.credit.Entity;
 
 import com.Credit.credit.Model.CreditTotal;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -37,9 +38,6 @@ public class Credit {
     private LocalDate end_date;
     @Column
     private int client_id;
-    @Column
-    //кол-во просрочек
-    private int delay_amount;
     @Column
     //основ долг
     private double total_debt;
@@ -92,7 +90,6 @@ public class Credit {
                 d=d.plusDays(1);
         }
         this.end_date=d;
-        this.delay_amount=0;
 
         //this.total_debt=;
         this.repaid_status=false;
@@ -136,14 +133,6 @@ public class Credit {
 
     public void setClient_id(int client_id) {
         this.client_id = client_id;
-    }
-
-    public int getDelay_amount() {
-        return delay_amount;
-    }
-
-    public void setDelay_amount(int delay_amount) {
-        this.delay_amount = delay_amount;
     }
 
     public double getTotal_debt() {

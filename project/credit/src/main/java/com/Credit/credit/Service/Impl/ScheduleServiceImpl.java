@@ -24,28 +24,21 @@ public class ScheduleServiceImpl implements ScheduleService {
     @PersistenceContext
     private EntityManager em;
 
+    public List<Schedule> findAll() {
+        return (List<Schedule>) scheduleRepository.findAll();
+    }
+
     @Override
     public Schedule getById(Integer id) {
         return scheduleRepository.findById(id).orElse(null);
     }
     @Override
+    public Schedule findById(Integer id) {
+        return scheduleRepository.findById(id).orElse(null);
+    }
+    @Override
     public List<Schedule> getSchedule(Integer creditId) {
-
-        /*StoredProcedureQuery query = em.createNamedStoredProcedureQuery("getAllSchedules");
-        query.registerStoredProcedureParameter("id_cr", Integer.class, ParameterMode.IN);
-        query.setParameter("id_cr", creditId);
-        query.execute();
-        return query.getResultList();*/
         return scheduleRepository.getSchedule(creditId);
-
-        /*StoredProcedureQuery storedProcedure =
-                entityManager
-                        .createStoredProcedureQuery("sp_schedules",Schedule.class)
-                        .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
-                        .setParameter(1, 2015);
-
-        storedProcedure.getResultList()
-                .forEach(c -> Assert.assertEquals(new Integer(2015), ((Car) c).getYear()));*/
     }
     /*@Override
     public List<Schedule> getSchedule(Integer creditId) {

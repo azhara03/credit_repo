@@ -1,14 +1,16 @@
 package com.Credit.credit.Controller;
 
-import com.Credit.credit.Model.CreditModel;
+import com.Credit.credit.Entity.Credit;
+import com.Credit.credit.Entity.Payment;
+import com.Credit.credit.Entity.Schedule;
 import com.Credit.credit.Model.PaymentModel;
-import com.Credit.credit.Service.CreditService;
 import com.Credit.credit.Service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,6 +18,15 @@ import java.util.Map;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
+
+    @GetMapping("/all")
+    public List<Payment> getAll(){
+        return paymentService.findAll();
+    }
+    @GetMapping("/{id}")
+    public Payment getPayment(@PathVariable Integer id){
+        return paymentService.getById(id);
+    }
     @PostMapping("/add")
     public PaymentModel add(@RequestBody PaymentModel model){
 

@@ -13,7 +13,7 @@
     <h2>Кредитный калькулятор</h2>
     <br>
 
-    <form th:method="POST" th:action="@{/}">
+    <form th:method="POST" th:action="@{/credits/calculate}">
       <div class="container">
         <div class="row">
           <div class="col-md-3">
@@ -25,7 +25,7 @@
             <label for="dropDownList">Вид кредита</label>
             <select class="form-select" id="dropDownList">
               <option value="0">Выберите вид кредита</option>
-              <option th:each="option : ${type}" th:value="${option.id}" th:text="${option.creditname}"></option>
+              <option th:each="option : ${type}" th:value="${option.id}" th:text="${option.credit_name}"></option>
             </select>
           </div>
 
@@ -38,16 +38,14 @@
           </div>
 
           <div class="col-md-3">
-            <label for="dropDownList2">Срок</label>
-            <select class="form-select" id="dropDownList2">
-              <option value="0">Выберите срок</option>
-              <option th:each="option : ${term}" th:value="${option.id}" th:text="${option.term}"></option>
-            </select>
+            <label for="dropDownList4">Срок</label>
+            <input type="number" class="form-control" id="dropDownList5"  >
           </div>
-
         </div>
       </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">Calculate</button>
       <form>
+
   </div>
 </body>
 </html>

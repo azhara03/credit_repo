@@ -1,16 +1,13 @@
 package com.Credit.credit.Controller;
 
-import com.Credit.credit.Entity.Credit;
 import com.Credit.credit.Entity.Schedule;
 import com.Credit.credit.Model.CreditModel;
-import com.Credit.credit.Model.CreditTotal;
-import com.Credit.credit.Model.Platej;
 import com.Credit.credit.Service.CreditService;
-import com.Credit.credit.Service.CreditTermService;
 import com.Credit.credit.Service.ScheduleService;
+import com.Credit.credit.Entity.Credit;
+import com.Credit.credit.Model.Platej;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/credits")
 public class CreditController {
    @Autowired
-   private  CreditService creditService;
+   private CreditService creditService;
     @Autowired
     private ScheduleService scheduleService;
     @GetMapping("/all")
@@ -37,12 +34,12 @@ public class CreditController {
         return creditService.getCredit(d1, d2);
     }
     @GetMapping("/loanInfo")
-    public List getLoanInfo(@RequestParam(value="start_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d1,
-                                         @RequestParam(value="end_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d2){
+    public List<Map<String, ?>> getLoanInfo(@RequestParam(value="start_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d1,
+                                                  @RequestParam(value="end_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d2){
         return creditService.getLoan(d1, d2);
     }
     @GetMapping("/loanByDay")
-    public List getLoanByDay(@RequestParam(value="start_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d1,
+    public List<Map<String, ?>> getLoanByDay(@RequestParam(value="start_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d1,
                             @RequestParam(value="end_d",required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate d2){
         return creditService.getLoanByDay(d1, d2);
     }

@@ -1,12 +1,15 @@
 package com.Credit.credit.Service.Impl;
 
-import com.Credit.credit.Entity.*;
+import com.Credit.credit.Entity.Credit;
+import com.Credit.credit.Entity.Payment;
+import com.Credit.credit.Entity.Schedule;
 import com.Credit.credit.Model.PaymentModel;
-import com.Credit.credit.Repository.CreditRepository;
 import com.Credit.credit.Repository.PaymentRepository;
 import com.Credit.credit.Repository.ScheduleRepository;
-import com.Credit.credit.Service.PaymentService;
 import com.Credit.credit.Service.ScheduleService;
+import com.Credit.credit.Entity.*;
+import com.Credit.credit.Repository.CreditRepository;
+import com.Credit.credit.Service.PaymentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +34,10 @@ public class PaymentServiceImpl implements PaymentService {
     ScheduleService scheduleService;
     public List<Payment> findAll() {
         return paymentRepository.findAll();
+    }
+
+    public Payment getById(Integer paymentId){
+        return paymentRepository.findById(paymentId).orElse(null);
     }
     LocalDate compare(LocalDate dateOfSession, LocalDate compared)
     {
@@ -73,33 +80,44 @@ public class PaymentServiceImpl implements PaymentService {
                     else {
                         credit.setTotal_debt(credit.getTotal_debt() - model.getTotal_amount());
                     }
+                    schedule.setPayment_status(true);
+                    payment.setPayment_date(now);
+
+                    //creditRepository.save(credit);
+                    paymentRepository.save(payment);
                     ///schedule.setPayment(model.getTotal_amount());
                 }
                 else {
                     double percent = schedule.getCredit().getInterestRate().getDelay_percent();
                     peni = schedule.getMonth_pay() * (percent / 100) * a;
-                    payment.setDelay_sum(peni);
-                    //если клиент весь долг заплатил включая пени
-                    if(model.getTotal_amount()-peni==credit.getTotal_debt()){
-                        credit.setTotal_debt(0);
-                        credit.setRepaid_status(true);
-                    }
-                    else {
-                        credit.setTotal_debt(credit.getTotal_debt() - (model.getTotal_amount() - peni));
+                    if (model.getTotal_amount() >=credit.getMonth_pay()+peni) {
+                        payment.setDelay_sum(peni);
+                        //если клиент весь долг заплатил включая пени
+                        if (model.getTotal_amount() - peni == credit.getTotal_debt()) {
+                            credit.setTotal_debt(0);
+                            credit.setRepaid_status(true);
+                        } else {
+                            credit.setTotal_debt(credit.getTotal_debt() - (model.getTotal_amount() - peni));
+                        }
+                        schedule.setPayment_status(true);
+                        payment.setPayment_date(now);
+
+                        //creditRepository.save(credit);
+                        paymentRepository.save(payment);
                     }
                     //schedule.setPayment(model.getTotal_amount()-peni);
                 }
-                if(model.getTotal_amount() > credit.getMonth_pay()) {
+                if(model.getTotal_amount() > credit.getMonth_pay()+peni) {
                     Period p = Period.between(date1, credit.getStart_date());
                     //кол-во оставшихся месяцев
                     int month = credit.getTerm() - (p.getMonths() + 1);
                     double ejemPlatejPosleDosrPogash = (credit.getTotal_debt() / month);
                     credit.setMonth_pay(ejemPlatejPosleDosrPogash);
                 }
-                payment.setPayment_date(now);
-                schedule.setPayment_status(true);
+                //payment.setPayment_date(now);
+
                 creditRepository.save(credit);
-                paymentRepository.save(payment);
+                //paymentRepository.save(payment);
             }
         }
         return payment;

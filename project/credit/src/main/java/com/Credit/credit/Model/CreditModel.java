@@ -1,5 +1,7 @@
 package com.Credit.credit.Model;
 
+import com.Credit.credit.Entity.InterestRate;
+import com.Credit.credit.Entity.User;
 import com.Credit.credit.Entity.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

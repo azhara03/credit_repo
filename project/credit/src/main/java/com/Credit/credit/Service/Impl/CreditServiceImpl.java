@@ -1,14 +1,17 @@
 package com.Credit.credit.Service.Impl;
-import com.Credit.credit.Entity.*;
+import com.Credit.credit.Entity.Credit;
+import com.Credit.credit.Entity.InterestRate;
+import com.Credit.credit.Entity.Schedule;
+import com.Credit.credit.Entity.User;
 import com.Credit.credit.Model.CreditModel;
-import com.Credit.credit.Model.CreditTotal;
-import com.Credit.credit.Model.Platej;
 import com.Credit.credit.Repository.CreditRepository;
 import com.Credit.credit.Repository.ScheduleRepository;
 import com.Credit.credit.Repository.UserRepository;
 import com.Credit.credit.Service.CreditService;
-import com.Credit.credit.Service.CreditTermService;
 import com.Credit.credit.Service.InterestRateService;
+import com.Credit.credit.Entity.*;
+import com.Credit.credit.Model.Platej;
+import com.Credit.credit.Service.CreditTermService;
 import com.Credit.credit.Service.TypeOfCreditService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +37,14 @@ public class CreditServiceImpl implements CreditService {
     public List<Credit> findAll() {
         return (List<Credit>) creditRepository.findAll();
     }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Credit getById(Integer creditId) {
         return creditRepository.findById(creditId).orElse(null);
     }
-    @PersistenceContext
-    private EntityManager em;
+
     @Override
     public Map<String, ?> getCredit(LocalDate d1, LocalDate d2){
         //StoredProcedureQuery query = em.createNamedStoredProcedureQuery("getAllSchedules");
@@ -53,11 +56,11 @@ public class CreditServiceImpl implements CreditService {
         return creditRepository.getCreditInfo(d1, d2);
     }
     @Override
-    public List getLoan(LocalDate d1, LocalDate d2){
+    public List<Map<String, ?>> getLoan(LocalDate d1, LocalDate d2){
         return creditRepository.getLoan(d1, d2);
     }
     @Override
-    public List getLoanByDay(LocalDate d1, LocalDate d2){
+    public List<Map<String, ?>> getLoanByDay(LocalDate d1, LocalDate d2){
         return creditRepository.getLoanByDay(d1, d2);
     }
     private static boolean isWeekend(LocalDate date) {

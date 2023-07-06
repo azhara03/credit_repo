@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Getter
@@ -22,5 +21,4 @@ public class PaymentModel {
         this.schedule = schedule;
         this.total_amount = total_amount;
     }
-
 }
